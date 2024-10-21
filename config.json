@@ -10,7 +10,7 @@
 			"m.tv360.vn:80": [
 				"125.235.36.177"
 			],
-			"live.tv360.vn:80": [
+			"v.tv360.vn:80": [
 				"125.235.36.177"
 			],
 			"akamai.net:80": [
@@ -18,24 +18,26 @@
 			],
 			"m.akamaized.net:80": [
 				"125.235.36.177"
+			],
+			"v.akamaized.net:80": [
+				"125.235.36.177"
 			]
 		},
-		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
+		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf]User-Agent: Mozilla/5.0[crlf][crlf]",
 		"ServerNameIndication": "m.tv360.vn",
 		"MeekType": 0,
-		"Timeout": 5,
+		"Timeout": 2,
 		"ShowLog": false
 	},
 	"PsiphonCore": 4,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 100,
-		"Region": "JP",
+		"Tunnel": 200,
+		"Region": "VN", 
 		"Protocols": [
-			"FRONTED-MEEK-HTTP-OSSH",
-			"FRONTED-MEEK-OSSH"
+			"OSSH"
 		],
-		"TunnelWorkers": 100,
+		"TunnelWorkers": 150,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
