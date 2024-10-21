@@ -28,8 +28,8 @@
 				"113.171.10.243"
 			]
 		},
-		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
-		"ServerNameIndication": "m.tv360.vn",
+		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tiktok.com[crlf]Connection: Keep-Alive[crlf][crlf]",
+		"ServerNameIndication": "m.tiktok.com",
 		"MeekType": 0,
 		"Timeout": 3,
 		"ShowLog": false
@@ -37,13 +37,13 @@
 	"PsiphonCore": 4,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 300,
+		"Tunnel": 100,
 		"Region": "SG", 
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 300,
+		"TunnelWorkers": 100,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
