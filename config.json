@@ -10,9 +10,6 @@
 			"m.tv360.vn:80": [
 				"125.235.36.177"
 			],
-			"v.tv360.vn:80": [
-				"125.235.36.177"
-			],
 			"akamai.net:80": [
 				"125.235.36.177"
 			],
@@ -20,7 +17,15 @@
 				"125.235.36.177"
 			],
 			"m.tiktok.com:80": [
-				"113.171.10.216"
+				"113.171.10.216",
+				"113.171.10.209",
+				"113.171.10.208",
+				"113.171.10.211",
+				"113.171.10.241",
+				"113.171.10.242",
+				"113.171.10.210",
+				"113.171.10.217",
+				"113.171.10.243"
 			]
 		},
 		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
@@ -33,7 +38,7 @@
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
 		"Tunnel": 200,
-		"Region": "JP",  // Chuyển về server Nhật Bản
+		"Region": "SG",  // Chuyển về server Nhật Bản
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
