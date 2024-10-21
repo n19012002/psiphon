@@ -19,14 +19,14 @@ var (
 	Loop          = true
 	DefaultConfig = &Config{
 		CoreName: "psiphon-tunnel-core",
-		Tunnel:   1,
+		Tunnel:   2,
 		Region:   "",
 		Protocols: []string{
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH",
 		},
-		TunnelWorkers:  6,
-		KuotaDataLimit: 4,
+		TunnelWorkers:  60,
+		KuotaDataLimit: 0,
 		Authorizations: make([]string, 0),
 	}
 	DefaultKuotaData = &KuotaData{
