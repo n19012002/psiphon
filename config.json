@@ -1,32 +1,31 @@
 {
-	"ProxyRotator": {
-		"Port": "1080"
-	},
-	"Inject": {
-		"Enable": true,
-		"Type": 2,
-		"Port": "8989",
-		"Rules": {
-			"akamai.net:80": [
-				"125.235.36.177"
-			]
-		},
-		"Payload": "GET / HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
-		"ServerNameIndication": "m.tv360.vn",
-		"MeekType": 0,
-		"Timeout": 3,
-		"ShowLog": false
-	},
-	"PsiphonCore": 4,
-	"Psiphon": {
-		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 100,
-		"Region": "SG",
-		"Protocols": [
-			"FRONTED-MEEK-HTTP-OSSH"
-		],
-		"TunnelWorkers": 150,
-		"KuotaDataLimit": 0,
-		"Authorizations": []
-	}
+  "ProxyRotator": {
+    "Port": "1080"
+  },
+  "Inject": {
+    "Enable": false,
+    "Type": 2,
+    "Port": "8989",
+    "Rules": {
+      "akamai.net:80": ["125.235.36.177"],
+      "m.tv360.vn:80": ["125.235.36.177"],
+      "m.akamaized.net:80": ["125.235.36.177"],
+      "v.akamaized.net:80": ["125.235.36.177"]
+    },
+    "Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf][crlf]",
+    "ServerNameIndication": "livestream2.tv360.vn",
+    "MeekType": 0,
+    "Timeout": 7,
+    "ShowLog": false
+  },
+  "PsiphonCore": 4,
+  "Psiphon": {
+    "CoreName": "psiphon-tunnel-core",
+    "Tunnel": 100,
+    "Region": "HK",
+    "Protocols": ["FRONTED-MEEK-OSSH"],
+    "TunnelWorkers": 50,
+    "KuotaDataLimit": 0,
+    "Authorizations": []
+  }
 }
