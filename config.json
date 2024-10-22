@@ -4,7 +4,7 @@
 	},
 	"Inject": {
 		"Enable": true,
-		"Type": 2,
+		"Type": 1,
 		"Port": "8989",
 		"Rules": {
 			"m.tv360.vn:80": [
@@ -37,13 +37,13 @@
 	"PsiphonCore": 4,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 200,
+		"Tunnel": 100,
 		"Region": "JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 300,
+		"TunnelWorkers": 100,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
