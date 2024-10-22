@@ -1,49 +1,15 @@
-package libpsiphon
+package main
 
 import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"os"
 	"os/exec"
-	"strconv"
 	"strings"
 	"time"
-
-	"github.com/aztecrabbit/liblog"
-	"github.com/aztecrabbit/libproxyrotator"
-	"github.com/aztecrabbit/libutils"
 )
 
-var (
-	Loop          = true
-	DefaultConfig = &Config{
-		CoreName: "psiphon-tunnel-core",
-		Tunnel:   10,
-		Region:   "",
-		Protocols: []string{
-			"FRONTED-MEEK-HTTP-OSSH",
-			"FRONTED-MEEK-OSSH",
-		},
-		TunnelWorkers:  200,
-		KuotaDataLimit: 0,
-		Authorizations: make([]string, 0),
-	}
-	DefaultKuotaData = &KuotaData{
-		Port: make(map[int]map[string]float64),
-		All:  0,
-	}
-	ConfigPathPsiphon = libutils.GetConfigPath("brainfuck-psiphon-pro-go", "storage/psiphon")
-)
-
-func Stop() {
-	Loop = false
-}
-
-func RemoveData() {
-	os.RemoveAll(ConfigPathPsiphon + "/data")
-}
-
+// Config định nghĩa các cấu hình cho Psiphon
 type Config struct {
 	CoreName       string
 	Tunnel         int
@@ -54,216 +20,115 @@ type Config struct {
 	Authorizations []string
 }
 
-type KuotaData struct {
-	Port map[int]map[string]float64
-	All  float64
-}
-
-type Data struct {
-	MigrateDataStoreDirectory string
-	UpstreamProxyURL          string
-	LocalSocksProxyPort       int
-	SponsorId                 string
-	PropagationChannelId      string
-	EmitBytesTransferred      bool
-	EmitDiagnosticNotices     bool
-	DisableLocalHTTPProxy     bool
-	EgressRegion              string
-	TunnelPoolSize            int
-	ConnectionWorkerPoolSize  int
-	LimitTunnelProtocols      []string
-	Authorizations            []string
-}
-
+// Psiphon chứa các thông tin về kết nối
 type Psiphon struct {
-	ProxyRotator    *libproxyrotator.ProxyRotator
-	Config          *Config
-	ProxyPort       string
-	KuotaData       *KuotaData
-	ListenPort      int
+	Config         *Config
 	TunnelConnected int
-	Verbose         bool
-}
-
-func (p *Psiphon) LogInfo(message string, color string) {
-	if Loop {
-		liblog.LogInfo(message, strconv.Itoa(p.ListenPort), color)
+	KuotaData      struct {
+		Port map[int]map[string]float64
 	}
+	ListenPort int
+	Verbose    bool
 }
 
-func (p *Psiphon) LogVerbose(message string, color string) {
-	if p.Verbose {
-		p.LogInfo(fmt.Sprintf("%[1]sVERBOSE%[3]s %[2]s::%[3]s %[1]s", color, liblog.Colors["P1"], liblog.Colors["CC"])+message, color)
-	}
+// DefaultConfig định nghĩa các giá trị mặc định
+var DefaultConfig = &Config{
+	CoreName: "psiphon-tunnel-core",
+	Tunnel:   10, // Số luồng kết nối tối ưu
+	Region:   "", // Khu vực không xác định
+	Protocols: []string{
+		"FRONTED-MEEK-HTTP-OSSH",
+		"FRONTED-MEEK-OSSH",
+	},
+	TunnelWorkers:  200, // Số lượng workers để cải thiện kết nối
+	KuotaDataLimit: 0,   // Không giới hạn băng thông
+	Authorizations: make([]string, 0),
 }
 
-func (p *Psiphon) GetAuthorizations() []string {
-	data := make([]string, 0)
-
-	if len(p.Config.Authorizations) != 0 {
-		data = append(data, p.Config.Authorizations[0])
-		p.Config.Authorizations = append(p.Config.Authorizations[1:], p.Config.Authorizations[0])
-	}
-
-	return data
-}
-
-func (p *Psiphon) CheckKuotaDataLimit(sent float64, received float64) bool {
+// CheckKuotaDataLimit kiểm tra giới hạn băng thông để tránh throttle
+func (p *Psiphon) CheckKuotaDataLimit(sent, received float64) bool {
 	if p.Config.KuotaDataLimit != 0 && int(p.KuotaData.Port[p.ListenPort]["all"]) >= (p.Config.KuotaDataLimit*1000000) &&
 		int(sent) == 0 && int(received) <= 64000 {
 		return false
 	}
-
 	return true
 }
 
-func (p *Psiphon) Start() {
-	PsiphonData := &Data{
-		MigrateDataStoreDirectory: ConfigPathPsiphon + "/data/" + strconv.Itoa(p.ListenPort),
-		UpstreamProxyURL:          "http://127.0.0.1:" + p.ProxyPort,
-		LocalSocksProxyPort:       p.ListenPort,
-		SponsorId:                 "00000000000000FF",
-		PropagationChannelId:      "00000000000000FF",
-		EmitBytesTransferred:      true,
-		EmitDiagnosticNotices:     true,
-		DisableLocalHTTPProxy:     true,
-		EgressRegion:              strings.ToUpper(p.Config.Region),
-		TunnelPoolSize:            p.Config.Tunnel,
-		ConnectionWorkerPoolSize:  p.Config.TunnelWorkers,
-		LimitTunnelProtocols:      p.Config.Protocols,
-		Authorizations:            p.GetAuthorizations(),
+// LogVerbose ghi log nếu chế độ verbose được bật
+func (p *Psiphon) LogVerbose(message string, color string) {
+	if p.Verbose {
+		fmt.Printf("VERBOSE: %s\n", message)
 	}
+}
 
-	libutils.JsonWrite(PsiphonData, PsiphonData.MigrateDataStoreDirectory+"/config.json")
-
-	PsiphonFileBoltdb := PsiphonData.MigrateDataStoreDirectory + "/ca.psiphon.PsiphonTunnel.tunnel-core/datastore/psiphon.boltdb"
-	if _, err := os.Stat(PsiphonFileBoltdb); os.IsNotExist(err) {
-		libutils.CopyFile(
-			libutils.RealPath("/storage/psiphon/database/psiphon.boltdb"), PsiphonFileBoltdb,
-		)
-	}
-
-	p.LogInfo("Connecting", liblog.Colors["G1"])
-
-	for Loop {
+// RunPsiphon khởi chạy Psiphon Tunnel và quản lý kết nối
+func (p *Psiphon) RunPsiphon() {
+	for {
+		// Khởi tạo lại dữ liệu kết nối
 		p.KuotaData.Port[p.ListenPort] = make(map[string]float64)
 		p.KuotaData.Port[p.ListenPort]["all"] = 0
 		p.TunnelConnected = 0
 
+		// Lệnh chạy Psiphon Tunnel Core
 		command := exec.Command(
-			libutils.RealPath(p.Config.CoreName), "-config", PsiphonData.MigrateDataStoreDirectory+"/config.json",
+			p.Config.CoreName, "-config", "./config.json",
 		)
-		command.Dir = PsiphonData.MigrateDataStoreDirectory
 
+		// Lấy stderr để ghi lại lỗi
 		stderr, err := command.StderrPipe()
 		if err != nil {
 			panic(err)
 		}
 
+		// Đọc log từ Psiphon
 		scanner := bufio.NewScanner(stderr)
 		go func() {
-			var text string
-			var line map[string]interface{}
-			for Loop && scanner.Scan() {
-				text = scanner.Text()
+			for scanner.Scan() {
+				text := scanner.Text()
+				var line map[string]interface{}
 				json.Unmarshal([]byte(text), &line)
 
 				noticeType := line["noticeType"]
 
 				if noticeType == "BytesTransferred" {
 					data := line["data"].(map[string]interface{})
-					diagnosticID := data["diagnosticID"].(string)
 					sent := data["sent"].(float64)
 					received := data["received"].(float64)
 
-					p.KuotaData.Port[p.ListenPort][diagnosticID] += sent + received
-					p.KuotaData.Port[p.ListenPort]["all"] += sent + received
-					p.KuotaData.All += sent + received
-
-					if p.CheckKuotaDataLimit(sent, received) == false {
+					// Kiểm tra giới hạn dữ liệu
+					if !p.CheckKuotaDataLimit(sent, received) {
+						p.LogVerbose("Reached data limit, stopping connection...", "R1")
 						break
 					}
+				}
 
-					liblog.LogReplace(
-						fmt.Sprintf(
-							"%v (%v) (%v) (%v)",
-							p.ListenPort,
-							diagnosticID,
-							libutils.BytesToSize(p.KuotaData.Port[p.ListenPort][diagnosticID]),
-							libutils.BytesToSize(p.KuotaData.All),
-						),
-						liblog.Colors["G1"],
-					)
-
-				} else if noticeType == "ActiveTunnel" {
-					p.ProxyRotator.AddProxy("0.0.0.0:" + strconv.Itoa(p.ListenPort))
-					p.TunnelConnected++
-					if p.Config.Tunnel > 1 {
-						diagnosticID := line["data"].(map[string]interface{})["diagnosticID"].(string)
-						p.LogInfo(fmt.Sprintf("Connected (%s)", diagnosticID), liblog.Colors["Y1"])
-					}
-					if p.TunnelConnected == p.Config.Tunnel {
-						p.LogInfo("Connected", liblog.Colors["Y1"])
-					}
-
-				} else if noticeType == "Alert" || noticeType == "Warning" {
+				if noticeType == "Alert" || noticeType == "Warning" {
 					message := line["data"].(map[string]interface{})["message"].(string)
-
-					if strings.HasPrefix(message, "Config migration:") {
-						continue
-					} else if strings.Contains(message, "meek round trip failed") {
-						if p.Config.Tunnel == 1 && p.Config.Tunnel == p.TunnelConnected && (message == "meek round trip failed: remote error: tls: bad record MAC" ||
-							message == "meek round trip failed: context deadline exceeded" ||
-							message == "meek round trip failed: EOF" ||
-							strings.Contains(message, "psiphon.CustomTLSDial")) {
-							p.LogVerbose(text, liblog.Colors["R1"])
-							break
-						}
-					} else if strings.Contains(message, "controller shutdown due to component failure") ||
-						strings.Contains(message, "psiphon.(*ServerContext).DoConnectedRequest") ||
-						strings.Contains(message, "psiphon.(*Tunnel).sendSshKeepAlive") ||
-						strings.Contains(message, "psiphon.(*Tunnel).Activate") ||
-						strings.Contains(message, "underlying conn is closed") ||
-						strings.Contains(message, "duplicate tunnel:") ||
-						strings.Contains(message, "tunnel failed:") {
-						p.LogVerbose(text, liblog.Colors["R1"])
+					if strings.Contains(message, "tunnel failed:") || strings.Contains(message, "underlying conn is closed") {
+						p.LogVerbose("Tunnel failed, reconnecting...", "R1")
 						break
-					} else if strings.Contains(message, "A connection attempt failed because the connected party did not properly respond after a period of time") {
-						p.LogVerbose(text, liblog.Colors["R1"])
-					} else {
-						p.LogVerbose(text, liblog.Colors["R1"])
 					}
 				}
 			}
 		}()
 
-		if err := command.Start(); err != nil {
-			p.LogVerbose(fmt.Sprintf("Command failed: %v", err), liblog.Colors["R1"])
+		// Thực thi lệnh Psiphon
+		if err := command.Run(); err != nil {
+			p.LogVerbose("Error occurred: "+err.Error(), "R1")
 		}
 
-		if err := command.Wait(); err != nil {
-			p.LogVerbose(fmt.Sprintf("Command exited: %v", err), liblog.Colors["R1"])
-		}
-
-		p.LogVerbose("Restarting tunnel", liblog.Colors["Y1"])
-		time.Sleep(1 * time.Second) // Thay đổi thời gian ngủ xuống 1 giây hoặc loại bỏ
+		// Chờ 3 giây trước khi thử kết nối lại
+		p.LogVerbose("Reconnecting in 3 seconds...", "B1")
+		time.Sleep(3 * time.Second)
 	}
 }
 
 func main() {
+	// Khởi tạo đối tượng Psiphon và cấu hình
 	psiphon := &Psiphon{
-		Config: DefaultConfig,
-		KuotaData: &KuotaData{
-			Port: make(map[int]map[string]float64),
-		},
+		Config:     DefaultConfig,
+		Verbose:    true,
+		ListenPort: 8080,
 	}
-
-	// Khởi động các tunnel song song
-	for i := 0; i < psiphon.Config.Tunnel; i++ {
-		psiphon.ListenPort = 1080 + i // Cài đặt cổng nghe cho mỗi tunnel
-		go psiphon.Start()
-	}
-
-	// Chờ các tunnel hoạt động
-	select {}
+	psiphon.RunPsiphon()
 }
