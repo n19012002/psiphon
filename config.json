@@ -18,20 +18,20 @@
 		},
 		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: videoakm1.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
 		"ServerNameIndication": "videoakm1.tv360.vn",
-		"MeekType": 2,  
+		"MeekType": 0,  
 		"Timeout": 5,
 		"ShowLog": true
 	},
-	"PsiphonCore": 100,
+	"PsiphonCore": 50,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 100,
+		"Tunnel": 500,
 		"Region": "SG",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 100,
+		"TunnelWorkers": 500,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
