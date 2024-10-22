@@ -7,17 +7,12 @@
 		"Type": 2,
 		"Port": "8989",
 		"Rules": {
-			"akahost.net:80": [
-       				 "23.7.244.127",
-				"125.235.36.177"
-    			],
 			"akamai.net:80": [
-				"23.7.244.127",
 				"125.235.36.177"
 			]
 		},
-		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: videoakm1.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
-		"ServerNameIndication": "videoakm1.tv360.vn",
+		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
+		"ServerNameIndication": "m.tv360.vn",
 		"MeekType": 0,  
 		"Timeout": 5,
 		"ShowLog": true
@@ -25,13 +20,13 @@
 	"PsiphonCore": 50,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 500,
+		"Tunnel": 100,
 		"Region": "SG",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 500,
+		"TunnelWorkers": 100,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
