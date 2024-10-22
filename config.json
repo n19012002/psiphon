@@ -32,7 +32,7 @@
 		"ServerNameIndication": "m.tv360.vn",
 		"MeekType": 0,
 		"Timeout": 5,
-		"ShowLog": false
+		"ShowLog": true
 	},
 	"PsiphonCore": 30,
 	"Psiphon": {
@@ -41,9 +41,7 @@
 		"Region": "JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
-			"FRONTED-MEEK-OSSH",
-			"FRONTED-OSSH",
-			"FRONTED-HTTP"
+			"FRONTED-MEEK-OSSH"
 		],
 		"TunnelWorkers": 10,
 		"KuotaDataLimit": 0,
