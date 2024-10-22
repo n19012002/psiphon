@@ -230,19 +230,40 @@ func (p *Psiphon) Start() {
 						break
 					} else if strings.Contains(message, "A connection attempt failed because the connected party did not properly respond after a period of time") {
 						p.LogVerbose(text, liblog.Colors["R1"])
-						break
+					} else {
+						p.LogVerbose(text, liblog.Colors["R1"])
 					}
-
-					p.LogVerbose(text, liblog.Colors["R1"])
 				}
 			}
 		}()
 
-		command.Run()
+		if err := command.Start(); err != nil {
+			p.LogVerbose(fmt.Sprintf("Command failed: %v", err), liblog.Colors["R1"])
+		}
 
-		p.LogVerbose("Reconnecting", liblog.Colors["B1"])
-		libutils.Sleep(time.Second * 3)
+		if err := command.Wait(); err != nil {
+			p.LogVerbose(fmt.Sprintf("Command exited: %v", err), liblog.Colors["R1"])
+		}
+
+		p.LogVerbose("Restarting tunnel", liblog.Colors["Y1"])
+		time.Sleep(1 * time.Second) // Thay đổi thời gian ngủ xuống 1 giây hoặc loại bỏ
+	}
+}
+
+func main() {
+	psiphon := &Psiphon{
+		Config: DefaultConfig,
+		KuotaData: &KuotaData{
+			Port: make(map[int]map[string]float64),
+		},
 	}
 
-	liblog.LogDelete(p.ListenPort, liblog.Colors["R1"])
+	// Khởi động các tunnel song song
+	for i := 0; i < psiphon.Config.Tunnel; i++ {
+		psiphon.ListenPort = 1080 + i // Cài đặt cổng nghe cho mỗi tunnel
+		go psiphon.Start()
+	}
+
+	// Chờ các tunnel hoạt động
+	select {}
 }
