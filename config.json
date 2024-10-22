@@ -8,17 +8,14 @@
 		"Port": "8989",
 		"Rules": {
 			"m.tv360.vn:80": [
-				
 				"2.18.48.127",
 				"123.26.26.26"
 			],
 			"akamai.net:80": [
-				
 				"2.18.48.127",
 				"123.26.26.26"
 			],
 			"m.akamaized.net:80": [
-				
 				"2.18.48.127",
 				"123.26.26.26"
 			],
@@ -36,7 +33,7 @@
 		},
 		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
 		"ServerNameIndication": "m.tv360.vn",
-		"MeekType": 0,
+		"MeekType": 1,  // Thay đổi thành 1 hoặc 2 tùy vào loại bạn muốn sử dụng
 		"Timeout": 5,
 		"ShowLog": true
 	},
