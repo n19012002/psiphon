@@ -31,19 +31,19 @@
 		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
 		"ServerNameIndication": "m.tv360.vn",
 		"MeekType": 0,
-		"Timeout": 3,  // Giảm thời gian timeout xuống 3 giây
-		"ShowLog": true // Bật logging để theo dõi hiệu suất
+		"Timeout": 3,
+		"ShowLog": false
 	},
 	"PsiphonCore": 80,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 100,
-		"Region": "JP", // Có thể thay đổi sang khu vực khác nếu cần
+		"Tunnel": 50,
+		"Region": "JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 50, // Giảm số lượng Tunnel Workers xuống 50 để cải thiện hiệu suất
+		"TunnelWorkers": 50,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
