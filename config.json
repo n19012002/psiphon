@@ -7,13 +7,15 @@
 		"Type": 2,
 		"Port": "8989",
 		"Rules": {
-			"tv360.vn:80": [
+			"m.tv360.vn:80": [
 				"149.104.101.35",
-				"139.177.246.200",
-				"139.177.246.199",
-				"139.177.246.198",
-				"139.177.246.197",
 				"149.104.101.34"
+			],
+			"akamai.net:80": [
+				"125.235.36.177"
+			],
+			"m.akamaized.net:80": [
+				"125.235.36.177"
 			],
 			"bplslb.com:80": [
 				"149.104.101.35",
@@ -26,11 +28,11 @@
 		"Timeout": 5,
 		"ShowLog": true
 	},
-	"PsiphonCore": 50,
+	"PsiphonCore": 100,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
 		"Tunnel": 10,
-		"Region": "SG",
+		"Region": "JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
