@@ -34,11 +34,11 @@
 		"Timeout": 5,
 		"ShowLog": false
 	},
-	"PsiphonCore": 35,
+	"PsiphonCore": 30,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
 		"Tunnel": 100,
-		"Region": "UK",
+		"Region": "US",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
