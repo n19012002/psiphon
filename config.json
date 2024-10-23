@@ -20,7 +20,7 @@
 	"PsiphonCore": 30,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 200,
+		"Tunnel": 1000,
 		"Region": "JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
