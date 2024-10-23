@@ -20,13 +20,13 @@
 	"PsiphonCore": 50,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 20,
+		"Tunnel": 100,
 		"Region": "JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 20,
+		"TunnelWorkers": 100,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
