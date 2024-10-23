@@ -23,8 +23,8 @@
 		"Tunnel": 20,
 		"Region": "JP",
 		"Protocols": [
-			"FRONTED-MEEK-HTTP-OSSH",
-			"FRONTED-MEEK-OSSH"
+			"UNFRONTED-MEEK-HTTPS-OSSH",  
+			"UNFRONTED-MEEK-HTTPS-OSSH"
 		],
 		"TunnelWorkers": 20,
 		"KuotaDataLimit": 0,
