@@ -23,9 +23,7 @@
 		"Tunnel": 100,
 		"Region": [
 			"SG",
-			"JP",
-			"US",
-			"UK"
+			"JP"
 		],
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
