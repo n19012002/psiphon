@@ -11,9 +11,9 @@
 				"live.tv360.vn",
 				"imageakm1.tv360.vn",
 				"live1.tv360.vn",
+				"125.235.36.177",
 				"videoakm1.tv360.vn",
-				"livestream.tv360.vn",
-				"125.235.36.177"
+				"livestream.tv360.vn"
 			]
 		},
 		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
@@ -26,7 +26,7 @@
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
 		"Tunnel": 100,
-		"Region": "AU",
+		"Region": "AT",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
