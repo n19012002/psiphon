@@ -8,6 +8,11 @@
 		"Port": "8989",
 		"Rules": {
 			"akamai.net:80": [
+				"live.tv360.vn",
+				"imageakm1.tv360.vn",
+				"live1.tv360.vn",
+				"videoakm1.tv360.vn",
+				"livestream.tv360.vn",
 				"125.235.36.177"
 			]
 		},
