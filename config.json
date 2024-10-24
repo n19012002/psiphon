@@ -1,6 +1,6 @@
 {
 	"ProxyRotator": {
-		"Port": "80"
+		"Port": "8080"
 	},
 	"Inject": {
 		"Enable": true,
