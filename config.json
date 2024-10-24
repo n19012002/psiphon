@@ -11,22 +11,22 @@
 				"125.235.36.177"
 			]
 		},
-		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: live1.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
-		"ServerNameIndication": "live1.tv360.vn",
+		"Payload": "CONNECT [host_port] HTTP/1.1[crlf]Host: m.tv360.vn[crlf]Connection: Keep-Alive[crlf][crlf]",
+		"ServerNameIndication": "m.tv360.vn",
 		"MeekType": 0,
-		"Timeout": 3,
+		"Timeout": 5,
 		"ShowLog": false
 	},
-	"PsiphonCore": 100,
+	"PsiphonCore": 50,
 	"Psiphon": {
 		"CoreName": "psiphon-tunnel-core",
-		"Tunnel": 20,
+		"Tunnel": 50,
 		"Region":"JP",
 		"Protocols": [
 			"FRONTED-MEEK-HTTP-OSSH",
 			"FRONTED-MEEK-OSSH"
 		],
-		"TunnelWorkers": 20,
+		"TunnelWorkers": 50,
 		"KuotaDataLimit": 0,
 		"Authorizations": []
 	}
